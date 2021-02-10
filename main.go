@@ -22,21 +22,21 @@ func main() {
 	}
 
 	// timeout in case Prometheus does not respond quickly enough
-	prometheusApiTimeout_s := os.Getenv("PROMETHEUS_API_TIMEOUT")
-	if prometheusApiTimeout_s == "" {
-		prometheusApiTimeout_s = "10"
+	prometheusApiTimeoutS := os.Getenv("PROMETHEUS_API_TIMEOUT")
+	if prometheusApiTimeoutS == "" {
+		prometheusApiTimeoutS = "10"
 	}
-	prometheusApiTimeout_i, err := strconv.Atoi(prometheusApiTimeout_s)
+	prometheusApiTimeoutI, err := strconv.Atoi(prometheusApiTimeoutS)
 	if err != nil {
 		log.Fatalf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
 	}
-	prometheusApiTimeout := time.Duration(prometheusApiTimeout_i)
+	prometheusApiTimeout := time.Duration(prometheusApiTimeoutI)
 
-	prometheusAlertSeverities_csv := os.Getenv("PROMETHEUS_ALERT_SEVERITIES")
-	if prometheusAlertSeverities_csv == "" {
-		prometheusAlertSeverities_csv = "critical,warning"
+	prometheusAlertSeveritiesCSV := os.Getenv("PROMETHEUS_ALERT_SEVERITIES")
+	if prometheusAlertSeveritiesCSV == "" {
+		prometheusAlertSeveritiesCSV = "critical,warning"
 	}
-	prometheusAlertSeverities := strings.Split(prometheusAlertSeverities_csv, ",")
+	prometheusAlertSeverities := strings.Split(prometheusAlertSeveritiesCSV, ",")
 
 	// the path for the liveness check
 	kubernetesLivenessPath := os.Getenv("KUBE_LIVENESS_PATH")
@@ -69,13 +69,13 @@ func main() {
 	readyResponse := func(writer http.ResponseWriter, request *http.Request) {
 		writer.Header().Add("Content-Type", "text/plain")
 		writer.WriteHeader(http.StatusOK)
-		writer.Write([]byte("ok\n"))
+		_, _ = writer.Write([]byte("ok\n"))
 	}
 
 	notReadyResponse := func(writer http.ResponseWriter, request *http.Request, err error) {
 		writer.Header().Add("Content-Type", "text/plain")
 		writer.WriteHeader(http.StatusServiceUnavailable)
-		writer.Write([]byte(fmt.Sprintf("not ok, err:\n%v\n", err)))
+		_, _ = writer.Write([]byte(fmt.Sprintf("not ok, err:\n%v\n", err)))
 	}
 
 	// register at live path

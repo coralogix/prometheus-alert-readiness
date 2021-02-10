@@ -3,7 +3,7 @@
 Translates firing Prometheus alerts into a Kubernetes readiness path.
 
 ## Why?
-By running this container in a singleton deployment with PriorityClass `system-cluster-critical`, we can prevent automated rolling-update tooling from proceeding (as they will not proceed when such high-priority pods are `NotReady`) when they shouldn't, due to firing Prometheus alerts when underlying databases are in e.g. underreplicated status.
+By running this container in a singleton deployment with PriorityClass `system-cluster-critical`, we can prevent automated rolling-update tooling from proceeding (as they will not proceed when such high-priority pods are `NotReady`) when they shouldn't, due to firing Prometheus alerts when underlying databases are in e.g. under-replicated status.
 
 ## Configuration
 Configured by environment variables:
