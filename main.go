@@ -94,23 +94,21 @@ func main() {
 			notReadyResponse(writer, request, err)
 			return
 		}
-		alertFound := false
+
+		// note that alertsResult.Alerts only contains active alerts, not all alerts.
+		// but we're not interested in inactive alerts anyway.
 		for _, alert := range alertsResult.Alerts {
 			// scan until we reach the alert we're interested in
 			if string(alert.Labels[model.AlertNameLabel]) != prometheusAlertName {
 				continue
 			}
-			alertFound = true
 
 			if string(alert.State) == "firing" {
-				notReadyResponse(writer, request, errors.New("The Prometheus alert is firing!"))
+				errMsg := fmt.Sprintf("The Prometheus alert is firing: %v", alert.Labels)
+				log.Println("ERROR: " + errMsg)
+				notReadyResponse(writer, request, errors.New(errMsg))
 				return
 			}
-		}
-
-		if !alertFound {
-			notReadyResponse(writer, request, errors.New("Configured Prometheus alert was not found on the Prometheus endpoint!"))
-			return
 		}
 
 		// if there are no issues, then report readiness
