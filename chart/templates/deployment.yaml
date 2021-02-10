@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "prometheus-alert-readiness.fullname" . }}
+  labels:
+    {{- include "prometheus-alert-readiness.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "prometheus-alert-readiness.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "prometheus-alert-readiness.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: 'PROMETHEUS_ENDPOINT'
+              value: {{ .Values.configuration.prometheusEndpoint | quote }}
+            - name: 'PROMETHEUS_API_TIMEOUT'
+              value: {{ .Values.configuration.prometheusApiTimeout | quote }}
+            - name: 'PROMETHEUS_ALERT_SEVERITIES'
+              value: {{ .Values.configuration.prometheusAlertSeverities | quote }}
+            - name: 'KUBE_LIVENESS_PATH'
+              value: {{ .Values.configuration.kubeLivenessPath | quote }}
+            - name: 'KUBE_READINESS_PATH'
+              value: {{ .Values.configuration.kubeReadinessPath | quote }}
+            - name: 'KUBE_PROBE_LISTEN_PORT'
+              value: {{ .Values.configuration.kubeProbeListenPort | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.configuration.kubeProbeListenPort }}
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.configuration.kubeLivenessPath }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.configuration.kubeReadinessPath }}
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
