@@ -28,16 +28,14 @@ func main() {
 	}
 	prometheusApiTimeout_i, err := strconv.Atoi(prometheusApiTimeout_s)
 	if err != nil {
-		fmt.Printf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
 	}
 	prometheusApiTimeout := time.Duration(prometheusApiTimeout_i)
 
 	// the alert name whose status we are interested in
 	prometheusAlertName := os.Getenv("PROMETHEUS_ALERT_NAME")
 	if prometheusAlertName == "" {
-		fmt.Printf("Missing required parameter: PROMETHEUS_ALERT_NAME")
-		os.Exit(1)
+		log.Fatalln("Missing required parameter: PROMETHEUS_ALERT_NAME")
 	}
 
 	// the path for the liveness check
@@ -63,8 +61,7 @@ func main() {
 		Address: prometheusEndpoint,
 	})
 	if err != nil {
-		fmt.Printf("Error creating Prometheus client: %v\n", err)
-		os.Exit(1)
+		log.Fatalf("Error creating Prometheus client: %v\n", err)
 	}
 
 	v1api := v1.NewAPI(client)
@@ -112,12 +109,14 @@ func main() {
 		}
 
 		if !alertFound {
-			panic("Configured Prometheus alert was not found on the Prometheus endpoint!")
+			notReadyResponse(writer, request, errors.New("Configured Prometheus alert was not found on the Prometheus endpoint!"))
+			return
 		}
 
 		// if there are no issues, then report readiness
 		readyResponse(writer, request)
 	})
 
+	log.Print("Starting HTTP listener...")
 	log.Fatal(http.ListenAndServe(":"+kubeProbeListenPort, nil))
 }
