@@ -10,6 +10,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -30,6 +31,12 @@ func main() {
 		log.Fatalf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
 	}
 	prometheusApiTimeout := time.Duration(prometheusApiTimeout_i)
+
+	prometheusAlertSeverities_csv := os.Getenv("PROMETHEUS_ALERT_SEVERITIES")
+	if prometheusAlertSeverities_csv == "" {
+		prometheusAlertSeverities_csv = "critical,warning"
+	}
+	prometheusAlertSeverities := strings.Split(prometheusAlertSeverities_csv, ",")
 
 	// the path for the liveness check
 	kubernetesLivenessPath := os.Getenv("KUBE_LIVENESS_PATH")
@@ -93,10 +100,14 @@ func main() {
 		for _, alert := range alertsResult.Alerts {
 			// scan until we reach the alert we're interested in
 			severity := string(alert.Labels["severity"])
-			if severity != "critical" &&
-				severity != "warning" &&
-				severity != "mixin-critical" &&
-				severity != "mixin-warning" {
+			severityIsRelevant := false
+			for _, configuredSeverity := range prometheusAlertSeverities {
+				if severity == configuredSeverity {
+					severityIsRelevant = true
+				}
+			}
+
+			if !severityIsRelevant {
 				continue
 			}
 
