@@ -18,6 +18,7 @@ spec:
       labels:
         {{- include "prometheus-alert-readiness.selectorLabels" . | nindent 8 }}
     spec:
+      priorityClassName: {{ .Values.configuration.kubePodPriorityClass | quote }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"

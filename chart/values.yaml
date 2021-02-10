@@ -37,4 +37,5 @@ configuration:
   prometheusAlertSeverities: 'critical,warning'
   kubeLivenessPath: '/live'
   kubeReadinessPath: '/ready'
+  kubePodPriorityClass: 'system-cluster-critical'
   kubeProbeListenPort: 8080
