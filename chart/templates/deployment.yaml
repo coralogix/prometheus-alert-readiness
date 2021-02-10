@@ -48,6 +48,11 @@ spec:
             httpGet:
               path: {{ .Values.configuration.kubeReadinessPath }}
               port: http
+            failureThreshold: {{ .Values.configuration.kubeReadinessTiming.failureThreshold }}
+            initialDelaySeconds: {{ .Values.configuration.kubeReadinessTiming.initialDelaySeconds }}
+            periodSeconds: {{ .Values.configuration.kubeReadinessTiming.periodSeconds }}
+            successThreshold: {{ .Values.configuration.kubeReadinessTiming.successThreshold }}
+            timeoutSeconds: {{ .Values.configuration.kubeReadinessTiming.timeoutSeconds }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}

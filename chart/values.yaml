@@ -33,9 +33,15 @@ affinity: {}
 
 configuration:
   prometheusEndpoint: 'http://localhost:9090'
-  prometheusApiTimeout: 10
+  prometheusApiTimeout: 4
   prometheusAlertSeverities: 'critical,warning'
   kubeLivenessPath: '/live'
   kubeReadinessPath: '/ready'
+  kubeReadinessTiming:
+    failureThreshold: 1     # if ever an alert is firing, immediately go NotReady
+    initialDelaySeconds: 0  # Kubernetes default
+    periodSeconds: 5        # Faster than the Kubernetes default: the faster we probe, the quicker we stop the rolling update
+    successThreshold: 24    # Ensures that we wait at least 5 * 24 = 2 minutes to resume rolling the cluster, in case alerts flap
+    timeoutSeconds: 5       # In line with prometheusApiTimeout and periodSeconds
   kubePodPriorityClass: 'system-cluster-critical'
   kubeProbeListenPort: 8080
