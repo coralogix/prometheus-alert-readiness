@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"github.com/prometheus/client_golang/api"
 	v1 "github.com/prometheus/client_golang/api/prometheus/v1"
-	"github.com/prometheus/common/model"
 	"log"
 	"net/http"
 	"os"
@@ -31,12 +30,6 @@ func main() {
 		log.Fatalf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
 	}
 	prometheusApiTimeout := time.Duration(prometheusApiTimeout_i)
-
-	// the alert name whose status we are interested in
-	prometheusAlertName := os.Getenv("PROMETHEUS_ALERT_NAME")
-	if prometheusAlertName == "" {
-		log.Fatalln("Missing required parameter: PROMETHEUS_ALERT_NAME")
-	}
 
 	// the path for the liveness check
 	kubernetesLivenessPath := os.Getenv("KUBE_LIVENESS_PATH")
@@ -99,7 +92,11 @@ func main() {
 		// but we're not interested in inactive alerts anyway.
 		for _, alert := range alertsResult.Alerts {
 			// scan until we reach the alert we're interested in
-			if string(alert.Labels[model.AlertNameLabel]) != prometheusAlertName {
+			severity := string(alert.Labels["severity"])
+			if severity != "critical" &&
+				severity != "warning" &&
+				severity != "mixin-critical" &&
+				severity != "mixin-warning" {
 				continue
 			}
 
