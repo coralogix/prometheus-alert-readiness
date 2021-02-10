@@ -1,4 +1,4 @@
-module github.com/coralogix/promql-ready
+module github.com/coralogix/prometheus-alerts-readiness
 
 go 1.15
 
