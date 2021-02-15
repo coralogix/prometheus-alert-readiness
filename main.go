@@ -104,6 +104,7 @@ func main() {
 			for _, configuredSeverity := range prometheusAlertSeverities {
 				if severity == configuredSeverity {
 					severityIsRelevant = true
+					break
 				}
 			}
 
