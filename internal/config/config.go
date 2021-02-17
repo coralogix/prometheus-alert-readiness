@@ -44,7 +44,7 @@ func New() (*Config, error) {
 	}
 	prometheusApiTimeoutI, err := strconv.Atoi(prometheusApiTimeoutS)
 	if err != nil {
-		log.Println("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
+		log.Printf("Cannot convert PROMETHEUS_API_TIMEOUT into an int: %v\n", err)
 		return nil, err
 	}
 	c.PrometheusApiTimeout = time.Duration(prometheusApiTimeoutI)

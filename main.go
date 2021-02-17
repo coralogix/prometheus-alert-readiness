@@ -31,7 +31,7 @@ func main() {
 
 	// register at live path
 	http.HandleFunc(c.KubernetesLivenessPath, func(writer http.ResponseWriter, request *http.Request) {
-		responses.Ready(writer, request)
+		responses.Ready(writer)
 	})
 
 	// register at ready path
@@ -42,7 +42,7 @@ func main() {
 
 		alertsResult, err := v1api.Alerts(ctx)
 		if err != nil {
-			responses.NotReady(writer, request, err)
+			responses.NotReady(writer, err)
 			return
 		}
 
@@ -66,13 +66,13 @@ func main() {
 			if alert.State == v1.AlertStateFiring {
 				errMsg := fmt.Sprintf("The Prometheus alert is firing: %v", alert.Labels)
 				log.Println("ERROR: " + errMsg)
-				responses.NotReady(writer, request, errors.New(errMsg))
+				responses.NotReady(writer, errors.New(errMsg))
 				return
 			}
 		}
 
 		// if there are no issues, then report readiness
-		responses.Ready(writer, request)
+		responses.Ready(writer)
 	})
 
 	log.Print("Starting HTTP listener...")
