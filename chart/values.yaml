@@ -1,5 +1,5 @@
 image:
-  repository: prometheus-alert-readiness
+  repository: ghcr.io/coralogix/prometheus-alert-readiness
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
