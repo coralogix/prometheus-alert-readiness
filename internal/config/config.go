@@ -13,20 +13,20 @@ type Config struct {
 	PrometheusEndpoint string
 
 	// timeout in case Prometheus does not respond quickly enough
-	PrometheusApiTimeout      time.Duration
+	PrometheusApiTimeout time.Duration
 
 	// for a given alert with the label key "severity", cause a NotReady response if the
 	// label value is one of the values in this slice.
 	PrometheusAlertSeverities []string
 
 	// the path for the liveness check
-	KubernetesLivenessPath    string
+	KubernetesLivenessPath string
 
 	// the path for the readiness check
-	KubernetesReadinessPath   string
+	KubernetesReadinessPath string
 
 	// the port number on which the liveness/readiness paths will listen
-	KubeProbeListenPort       string
+	KubeProbeListenPort string
 }
 
 // Instantiates a Configuration native-Go struct from raw external configuration sources.
