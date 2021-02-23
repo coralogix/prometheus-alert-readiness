@@ -43,7 +43,7 @@ given Elasticsearch pod as ready until [the entire cluster is green][es-cluster-
 However, if the cluster is momentarily yellow, then this results in the entire
 cluster becoming unavailable, with cascading failures in dependent services
 which are still functional, despite the cluster being in a yellow (i.e.
-underr-replicated, but not unavailable) state. The more mature approach is to
+under-replicated, but not unavailable) state. The more mature approach is to
 only check the health of the local Pod, i.e. to run `GET /_cluster/health?local=true`
 as a readiness check, but this no longer couples Kubernetes's understanding of
 readiness to Elasticsearch's notion of shard availability. Therefore, the fact
