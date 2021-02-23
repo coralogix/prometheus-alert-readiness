@@ -19,9 +19,9 @@ result, tooling that relies upon these generic methods to safely perform
 cluster operations (e.g. rolling upgrades of Kubernetes nodes) are unable to
 perform those operations safely, as they rely upon tooling which fails to
 provide the complete picture as to whether it is safe or not to perform the
-operation. As a result, most cluster operations therefore involve human
-operators, which is time-consuming and error-prone, particularly for human
-opertors responsible for multiple large clusters.
+operation. Unfortunately, most cluster operations therefore involve human
+operator intervention, which is time-consuming and error-prone, particularly
+when human operators are responsible for multiple large clusters.
 
 ### Case study: Elasticsearch
 Consider as an example: attempting to run Elasticsearch on Kubernetes. When
