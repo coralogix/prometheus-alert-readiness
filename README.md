@@ -1,8 +1,8 @@
 # prometheus-alert-readiness
 Exposes firing Prometheus alerts as a simple HTTP GET path, so that Kubernetes
-can check the path as a [readiness probe][readiness-probe].
+can check the path as a [readiness probe].
 
-[readiness-probe](https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes)
+[readiness probe]: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-readiness-probes
 
 ## What challenge does this address?
 There are two common classifications of Kubernetes clusters - those that are
@@ -37,7 +37,7 @@ availability of the Elasticsearch cluster will have been disrupted by the
 Kubernetes cluster operation. This is unacceptable in production clusters.
 
 Proposed solutions that attempt to solve this problem with a
-`PodDisruptionBudget` (like Elastic's own [cloud-on-k8s][cloud-on-k8s] project)
+`PodDisruptionBudget` (like Elastic's own [cloud-on-k8s] project)
 are naive and insufficient. Elastic's official approach is to not report a
 given Elasticsearch pod as ready until [the entire cluster is green][es-cluster-health].
 However, if the cluster is momentarily yellow, then this results in the entire
@@ -52,8 +52,8 @@ specific PodDisruptionBudgets are satisfied or unsatisfied, is no longer in
 and of itself sufficient to safely signal to cluster tooling whether it is safe
 to terminate the underlying Kubernetes nodes.
 
-[cloud-on-k8s][https://github.com/elastic/cloud-on-k8s]
-[es-cluster-health](https://github.com/elastic/helm-charts/blob/ffd109085023a37211c259302e2d076d84eeca94/elasticsearch/values.yaml#L228)
+[cloud-on-k8s]: https://github.com/elastic/cloud-on-k8s
+[es-cluster-health]: https://github.com/elastic/helm-charts/blob/ffd109085023a37211c259302e2d076d84eeca94/elasticsearch/values.yaml#L228
 
 ## How does this address the challenge?
 
@@ -80,7 +80,7 @@ Organizations that have adopted Prometheus probably already have these kinds of
 alerts configured anyway, delivering notifications to PagerDuty, Slack, email,
 etc.
 
-[es-exporter](https://github.com/justwatchcom/elasticsearch_exporter)
+[es-exporter]: https://github.com/justwatchcom/elasticsearch_exporter
 
 ### Governing cluster operations
 Most cluster tooling that attempts to govern cluster operations like rolling
