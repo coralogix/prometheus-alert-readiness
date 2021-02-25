@@ -23,64 +23,14 @@ operation. Unfortunately, most cluster operations therefore involve human
 operator intervention, which is time-consuming and error-prone, particularly
 when human operators are responsible for multiple large clusters.
 
-### Case study: Elasticsearch
-Consider as an example: attempting to run Elasticsearch on Kubernetes. When
-running Elasticsearch, a given _shard_ will be replicated a certain number of
-times between Elasticsearch nodes, to ensure that the shard will continue to
-be available, even if a specific Elasticsearch node is unavailable. In
-Kubernetes, the concept of an "Elasticsearch node" maps to a Pod. As such, we
-are faced with a dilemma as to when it is safe to terminate a Pod. On one hand,
-we need to ensure that each Elasticsearch shard always belongs to a Pod that is
-ready; if a shard is replicated twice, but both Pods to which the shard belongs
-are unavailable, then the shard itself will be unavailable, and the
-availability of the Elasticsearch cluster will have been disrupted by the
-Kubernetes cluster operation. This is unacceptable in production clusters.
-
-Proposed solutions that attempt to solve this problem with a
-`PodDisruptionBudget` (like Elastic's own [cloud-on-k8s] project)
-are naive and insufficient. Elastic's official approach is to not report a
-given Elasticsearch pod as ready until [the entire cluster is green][es-cluster-health].
-However, if the cluster is momentarily yellow, then this results in the entire
-cluster becoming unavailable, with cascading failures in dependent services
-which are still functional, despite the cluster being in a yellow (i.e.
-under-replicated, but not unavailable) state. The more mature approach is to
-only check the health of the local Pod, i.e. to run `GET /_cluster/health?local=true`
-as a readiness check, but this no longer couples Kubernetes's understanding of
-readiness to Elasticsearch's notion of shard availability. Therefore, the fact
-that specific Pods in Kubernetes are available or unavailable, and that
-specific PodDisruptionBudgets are satisfied or unsatisfied, is no longer in
-and of itself sufficient to safely signal to cluster tooling whether it is safe
-to terminate the underlying Kubernetes nodes.
-
-[cloud-on-k8s]: https://github.com/elastic/cloud-on-k8s
-[es-cluster-health]: https://github.com/elastic/helm-charts/blob/ffd109085023a37211c259302e2d076d84eeca94/elasticsearch/values.yaml#L228
-
 ## How does this address the challenge?
 
 ### Collecting information
 As Prometheus has gained traction as a monitoring solution, particularly among
 Kubernetes users, it has become increasingly common for databases and other
 stateful services to expose Prometheus-formatted metrics, especially
-health-relevant metrics. For example, the [Prometheus exporter for Elasticsearch][es-exporter]
-exposes cluster health information in a Prometheus metric called
-`elasticsearch_cluster_health_status`. Writing a Prometheus alert to notify
-when a cluster is unhealthy is then as simple as writing the following alert:
-
-```yaml
-name: ElasticsearchClusterUnhealthy
-expr: elasticsearch_cluster_health_status{color!="green"} != 0
-labels:
-  severity: warning
-annotations:
-  summary: ES cluster {{$labels.cluster}} is not healthy
-  description: The ES cluster {{$labels.cluster}} is currently responding with color {{$labels.color}}.
-```
-
-Organizations that have adopted Prometheus probably already have these kinds of
-alerts configured anyway, delivering notifications to PagerDuty, Slack, email,
-etc.
-
-[es-exporter]: https://github.com/justwatchcom/elasticsearch_exporter
+health-relevant metrics. As such, Prometheus is often configured to fire alerts
+when these metrics produce values that are outside of normal, healthy ranges.
 
 ### Governing cluster operations
 Most cluster tooling that attempts to govern cluster operations like rolling
@@ -107,6 +57,23 @@ requirement to otherwise coordinate with cluster operators. Additional
 Prometheus installations in the Kubernetes cluster; the `NotReady` status of
 a single `prometheus-alert-readiness` Pod is sufficient to pause cluster
 operations.
+
+## Case Studies
+There are three primary cases where we use `prometheus-alert-readiness` to
+safeguard Kubernetes clusters:
+
+* [Elasticsearch][study-elasticsearch], a database where the availability of
+replicas across Kubernetes Pods must be maintained to safeguard against data
+loss
+* [Kafka][study-kafka], a streaming datastore where the availability of
+replicas across Kubernetes Pods must be maintained to safeguard against data
+loss
+* [Sales demos][study-sales], to reduce the likelihood of cluster operations
+having a negative impact on important sales demos.
+
+[study-elasticsearch]: (/docs/case-studies/elasticsearch.md)
+[study-kafka]: (/docs/case-studies/kafka.md)
+[study-sales]: (/docs/case-studies/sales.md)
 
 ## Installation
 `prometheus-alert-readiness` is distributed as a Helm chart. Run e.g.:
