@@ -68,12 +68,12 @@ loss
 * [Kafka][study-kafka], a streaming datastore where the availability of
 replicas across Kubernetes Pods must be maintained to safeguard against data
 loss
-* [Sales demos][study-sales], to reduce the likelihood of cluster operations
-having a negative impact on important sales demos.
+* [Business risk reduction][study-risk], to temporarily reduce business risks
+that are sometimes associated with cluster operations.
 
 [study-elasticsearch]: (/docs/case-studies/elasticsearch.md)
 [study-kafka]: (/docs/case-studies/kafka.md)
-[study-sales]: (/docs/case-studies/sales.md)
+[study-risk]: (/docs/case-studies/business-risk.md)
 
 ## Installation
 `prometheus-alert-readiness` is distributed as a Helm chart. Run e.g.:
