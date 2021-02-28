@@ -36,7 +36,7 @@ information in a Prometheus metric called
 when a cluster is unhealthy is then as simple as writing the following alert:
 
 ```yaml
-name: ElasticsearchClusterUnhealthy
+alert: ElasticsearchClusterUnhealthy
 expr: elasticsearch_cluster_health_status{color!="green"} != 0
 labels:
   severity: warning
