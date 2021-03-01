@@ -71,9 +71,9 @@ loss
 * [Business risk reduction][study-risk], to temporarily reduce business risks
 that are sometimes associated with cluster operations.
 
-[study-elasticsearch]: (/docs/case-studies/elasticsearch.md)
-[study-kafka]: (/docs/case-studies/kafka.md)
-[study-risk]: (/docs/case-studies/business-risk.md)
+[study-elasticsearch]: /docs/case-studies/elasticsearch.md
+[study-kafka]: /docs/case-studies/kafka.md
+[study-risk]: /docs/case-studies/business-risk.md
 
 ## Installation
 `prometheus-alert-readiness` is distributed as a Helm chart. Run e.g.:
