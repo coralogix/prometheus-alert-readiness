@@ -53,5 +53,5 @@ returns to zero, i.e. all partitions in the Kafka cluster are fully replicated
 again, then the `prometheus-alert-readiness` pod will respond as `Ready` and
 allow the cluster tooling to proceed.
 
-[kafka-roller]: (https://github.com/strimzi/strimzi-kafka-operator/blob/9b2678d7f9f6b61e84ce30c9c922cd55072c984c/cluster-operator/src/main/java/io/strimzi/operator/cluster/operator/resource/KafkaRoller.java)
-[kafka-exporter]: (https://github.com/danielqsj/kafka_exporter)
+[kafka-roller]: https://github.com/strimzi/strimzi-kafka-operator/blob/9b2678d7f9f6b61e84ce30c9c922cd55072c984c/cluster-operator/src/main/java/io/strimzi/operator/cluster/operator/resource/KafkaRoller.java
+[kafka-exporter]: https://github.com/danielqsj/kafka_exporter
