@@ -10,6 +10,6 @@ entries:
     name: prometheus-alert-readiness
     type: application
     urls:
-    - https://coralogix.github.io/prometheus-alert-readiness/prometheus-alert-readiness-0.1.0.tgz
+    - https://coralogix.github.io/prometheus-alert-readiness/chart-repo/prometheus-alert-readiness-0.1.0.tgz
     version: 0.1.0
 generated: "2021-02-23T20:31:32.077038843+02:00"
