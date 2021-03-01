@@ -56,4 +56,4 @@ alert to stop firing, thus allowing the `prometheus-alert-readiness` pod to
 resume reporting `Ready`, and thus permitting cluster tooling to proceed with
 the cluster operation.
 
-[jira-exporter]: (https://github.com/jwholdsworth/jira-cloud-exporter)
+[jira-exporter]: https://github.com/jwholdsworth/jira-cloud-exporter
