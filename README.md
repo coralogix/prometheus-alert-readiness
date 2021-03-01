@@ -78,7 +78,7 @@ that are sometimes associated with cluster operations.
 ## Installation
 `prometheus-alert-readiness` is distributed as a Helm chart. Run e.g.:
 ```bash
-helm repo add prometheus-alert-readiness https://coralogix.github.io/prometheus-alert-readiness
+helm repo add prometheus-alert-readiness https://coralogix.github.io/prometheus-alert-readiness/chart-repo
 helm install prometheus-alert-readiness prometheus-alert-readiness/prometheus-alert-readiness
 ```
 
