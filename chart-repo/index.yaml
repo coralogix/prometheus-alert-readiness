@@ -3,7 +3,18 @@ entries:
   prometheus-alert-readiness:
   - apiVersion: v2
     appVersion: 0.1.1
-    created: "2021-02-23T20:31:32.077681502+02:00"
+    created: "2021-03-02T10:52:11.024100565+02:00"
+    description: Translates firing Prometheus alerts into a Kubernetes readiness path.
+    digest: 976511183f0544f56166996ee367e30bad644b59fae786818ca43e0685e20bc4
+    icon: https://artifacthub.io/static/media/helm-chart.svg
+    name: prometheus-alert-readiness
+    type: application
+    urls:
+    - https://coralogix.github.io/prometheus-alert-readiness/chart-repo/prometheus-alert-readiness-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 0.1.1
+    created: "2021-03-02T10:52:11.023750585+02:00"
     description: Translates firing Prometheus alerts into a Kubernetes readiness path.
     digest: 40aaec22ced0e59546135b920fa9522e6db78a667bb35ecb4dfd9d18ac74cee5
     icon: https://artifacthub.io/static/media/helm-chart.svg
@@ -12,4 +23,4 @@ entries:
     urls:
     - https://coralogix.github.io/prometheus-alert-readiness/chart-repo/prometheus-alert-readiness-0.1.0.tgz
     version: 0.1.0
-generated: "2021-02-23T20:31:32.077038843+02:00"
+generated: "2021-03-02T10:52:10.992945338+02:00"
