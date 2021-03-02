@@ -16,12 +16,13 @@ One of the primary challenges of running stateful services (and databases) in
 Kubernetes is that Kubernetes's methods of understanding workload availability
 (i.e. Pod readiness probes) are insufficiently expressive for databases. As a
 result, tooling that relies upon these generic methods to safely perform
-cluster operations (e.g. rolling upgrades of Kubernetes nodes) are unable to
-perform those operations safely, as they rely upon tooling which fails to
-provide the complete picture as to whether it is safe or not to perform the
-operation. Unfortunately, most cluster operations therefore involve human
-operator intervention, which is time-consuming and error-prone, particularly
-when human operators are responsible for multiple large clusters.
+cluster operations (e.g. rolling upgrades of Kubernetes nodes in Kops-based
+clusters using `kops rolling-update cluster`) are unable to perform those
+operations safely, as they rely upon tooling which fails to provide the complete
+picture as to whether it is safe or not to perform the operation. Unfortunately,
+most cluster operations therefore involve human operator intervention, which is
+time-consuming and error-prone, particularly when human operators are
+responsible for multiple large clusters.
 
 ## How does this address the challenge?
 

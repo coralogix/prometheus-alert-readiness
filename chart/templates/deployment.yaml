@@ -28,6 +28,8 @@ spec:
             privileged: false
             readOnlyRootFilesystem: true
             runAsNonRoot: true
+            runAsGroup: 65532
+            runAsUser: 65532
           env:
             - name: 'PROMETHEUS_ENDPOINT'
               value: {{ .Values.configuration.prometheusEndpoint | quote }}
